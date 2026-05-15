@@ -1,0 +1,54 @@
+# Local working state. NEVER commit.
+data/
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+
+# Compiled binaries
+/origin
+/origin-*
+*.exe
+*.test
+
+# Demo and bundle outputs
+*.tar
+*.tar.gz
+*.zip
+origin-demo-*
+
+# Editor + OS noise
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Claude Code / AI-assistant local state — never commit
+.claude/
+.aider*
+.cursor*
+
+# Profile/coverage outputs
+*.prof
+*.out
+coverage.html
+
+# Operator overrides
+log-id.txt
+
+# Anything starting with tmp- or scratch-
+tmp-*
+scratch-*
+
+# Explicit anti-ignores (override broader rules) ---------------------
+# Fixtures and intentional testdata MUST be committed.
+!protocol/v0-fixtures/
+!protocol/v0-fixtures/**
+!testdata/
+!testdata/**
+
+# Documentation must be committed.
+!docs/
+!docs/**

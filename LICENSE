@@ -1,0 +1,27 @@
+PLACEHOLDER — choose a license before public release.
+
+Recommended candidates for a protocol + reference implementation of this
+shape:
+
+  - Apache License 2.0      — permissive; explicit patent grant; standard
+                              for protocol projects.
+  - MIT License             — most permissive; no patent grant.
+  - BSD 3-Clause            — permissive; explicit no-endorsement clause.
+  - MPL 2.0                 — file-level weak copyleft; useful when you
+                              want modifications to one file to remain
+                              open without copyleft propagating.
+  - AGPL 3.0                — strong copyleft including network use;
+                              chooses to make hosted forks open.
+
+Considerations specific to Origin:
+
+  - The protocol document (protocol/origin-protocol-v0.md) and the test
+    fixtures (protocol/v0-fixtures/) benefit from a permissive license
+    so other implementations can be built freely against them.
+  - The reference implementation in this repository can carry the same
+    license or a different one; Apache 2.0 is the safest default for
+    "we want this protocol to be widely implemented."
+
+To activate this file, replace its contents with the full text of the
+chosen license. The repository README and CONTRIBUTING references will
+pick up automatically once this file is populated.
