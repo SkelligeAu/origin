@@ -29,7 +29,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/fitzee/origin/internal/canon"
+	"github.com/SkelligeAu/origin/internal/canon"
 )
 
 // Metadata describes one raw evidence record.

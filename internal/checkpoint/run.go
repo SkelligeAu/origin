@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fitzee/origin/internal/chain"
-	"github.com/fitzee/origin/internal/keys"
-	"github.com/fitzee/origin/internal/raw"
+	"github.com/SkelligeAu/origin/internal/chain"
+	"github.com/SkelligeAu/origin/internal/keys"
+	"github.com/SkelligeAu/origin/internal/raw"
 )
 
 const toolVersion = "origin@0.1.0"

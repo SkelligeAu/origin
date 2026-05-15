@@ -23,8 +23,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/fitzee/origin/internal/assertion"
-	"github.com/fitzee/origin/internal/canon"
+	"github.com/SkelligeAu/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/canon"
 )
 
 const (

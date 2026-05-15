@@ -18,9 +18,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/fitzee/origin/internal/assertion"
-	"github.com/fitzee/origin/internal/canon"
-	"github.com/fitzee/origin/internal/checkpoint"
+	"github.com/SkelligeAu/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/canon"
+	"github.com/SkelligeAu/origin/internal/checkpoint"
 )
 
 const (

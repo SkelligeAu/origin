@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/fitzee/origin/internal/canon"
+	"github.com/SkelligeAu/origin/internal/canon"
 )
 
 // AttestorRole discriminates how an ingestor came to record an Identity.

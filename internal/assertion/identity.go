@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/fitzee/origin/internal/canon"
+	"github.com/SkelligeAu/origin/internal/canon"
 )
 
 // Identity is the canonical content-addressable fact. An identity carries

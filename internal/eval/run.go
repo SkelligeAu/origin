@@ -15,7 +15,7 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/fitzee/origin/internal/keys"
+	"github.com/SkelligeAu/origin/internal/keys"
 	"github.com/open-policy-agent/opa/rego"
 )
 

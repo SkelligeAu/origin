@@ -13,8 +13,8 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/fitzee/origin/internal/assertion"
-	"github.com/fitzee/origin/internal/vocab"
+	"github.com/SkelligeAu/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/vocab"
 )
 
 const dataDir = "data"

@@ -22,11 +22,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fitzee/origin/internal/eval"
-	"github.com/fitzee/origin/internal/ingest"
-	"github.com/fitzee/origin/internal/project"
-	"github.com/fitzee/origin/internal/report"
-	"github.com/fitzee/origin/internal/verify"
+	"github.com/SkelligeAu/origin/internal/eval"
+	"github.com/SkelligeAu/origin/internal/ingest"
+	"github.com/SkelligeAu/origin/internal/project"
+	"github.com/SkelligeAu/origin/internal/report"
+	"github.com/SkelligeAu/origin/internal/verify"
 )
 
 // Run is the CLI entry point.

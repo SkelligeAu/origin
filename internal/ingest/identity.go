@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/fitzee/origin/internal/raw"
+	"github.com/SkelligeAu/origin/internal/raw"
 )
 
 // sigstoreIdentityIRI builds a deterministic identity IRI for a Sigstore-

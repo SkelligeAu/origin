@@ -14,10 +14,10 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/fitzee/origin/internal/assertion"
-	"github.com/fitzee/origin/internal/keys"
-	"github.com/fitzee/origin/internal/raw"
-	"github.com/fitzee/origin/internal/vocab"
+	"github.com/SkelligeAu/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/keys"
+	"github.com/SkelligeAu/origin/internal/raw"
+	"github.com/SkelligeAu/origin/internal/vocab"
 )
 
 const projectorVersion = "origin@0.1.0/projector"

@@ -28,7 +28,7 @@ The following are all in-scope security concerns and we want to hear about them:
 For non-trivial findings — anything affecting the protocol, the canonicalisation, or the verify checks — please report privately first. Two channels:
 
 **Primary channel — GitHub private vulnerability reporting.**
-Visit https://github.com/fitzee/origin/security/advisories and click *Report a vulnerability*. GitHub will walk you through a short form and route the report directly to the maintainer with a structured workflow for triage, embargo, and (if appropriate) CVE assignment.
+Visit https://github.com/SkelligeAu/origin/security/advisories and click *Report a vulnerability*. GitHub will walk you through a short form and route the report directly to the maintainer with a structured workflow for triage, embargo, and (if appropriate) CVE assignment.
 
 **Fallback channel — email.**
 `matt@skellige.com.au`. Use this if you do not have a GitHub account or prefer email. The address reaches the same maintainer; reports submitted by either channel are treated equivalently.

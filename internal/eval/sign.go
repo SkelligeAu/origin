@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/fitzee/origin/internal/canon"
+	"github.com/SkelligeAu/origin/internal/canon"
 )
 
 // canonicalClaimBytes produces the canonical (RFC 8785) JSON for a claim

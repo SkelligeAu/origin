@@ -12,13 +12,13 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/fitzee/origin/internal/assertion"
-	"github.com/fitzee/origin/internal/canon"
-	"github.com/fitzee/origin/internal/chain"
-	"github.com/fitzee/origin/internal/eval"
-	"github.com/fitzee/origin/internal/keys"
-	"github.com/fitzee/origin/internal/project"
-	"github.com/fitzee/origin/internal/raw"
+	"github.com/SkelligeAu/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/canon"
+	"github.com/SkelligeAu/origin/internal/chain"
+	"github.com/SkelligeAu/origin/internal/eval"
+	"github.com/SkelligeAu/origin/internal/keys"
+	"github.com/SkelligeAu/origin/internal/project"
+	"github.com/SkelligeAu/origin/internal/raw"
 )
 
 const dataDir = "data"

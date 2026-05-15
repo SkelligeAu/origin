@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/fitzee/origin/internal/chain"
+	"github.com/SkelligeAu/origin/internal/chain"
 )
 
 // OccurrenceLog is the append-only occurrence stream under

@@ -8,8 +8,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/fitzee/origin/internal/assertion"
-	"github.com/fitzee/origin/internal/checkpoint"
+	"github.com/SkelligeAu/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/checkpoint"
 )
 
 // TestAnchorFixture re-derives the Phase-5 anchor fixture artefacts and

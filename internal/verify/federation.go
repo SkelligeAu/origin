@@ -6,11 +6,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/fitzee/origin/internal/assertion"
-	"github.com/fitzee/origin/internal/chain"
-	"github.com/fitzee/origin/internal/keys"
-	"github.com/fitzee/origin/internal/peers"
-	"github.com/fitzee/origin/internal/vocab"
+	"github.com/SkelligeAu/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/chain"
+	"github.com/SkelligeAu/origin/internal/keys"
+	"github.com/SkelligeAu/origin/internal/peers"
+	"github.com/SkelligeAu/origin/internal/vocab"
 )
 
 // foreignLogDir returns the absolute path to data/assertions/occurrences/foreign/.

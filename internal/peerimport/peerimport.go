@@ -31,11 +31,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fitzee/origin/internal/assertion"
-	"github.com/fitzee/origin/internal/keys"
-	"github.com/fitzee/origin/internal/peers"
-	"github.com/fitzee/origin/internal/raw"
-	"github.com/fitzee/origin/internal/vocab"
+	"github.com/SkelligeAu/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/keys"
+	"github.com/SkelligeAu/origin/internal/peers"
+	"github.com/SkelligeAu/origin/internal/raw"
+	"github.com/SkelligeAu/origin/internal/vocab"
 )
 
 // FederationImportNormalizer is the normalizer version recorded on

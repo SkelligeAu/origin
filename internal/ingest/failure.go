@@ -7,9 +7,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/fitzee/origin/internal/assertion"
-	"github.com/fitzee/origin/internal/raw"
-	"github.com/fitzee/origin/internal/sigstore"
+	"github.com/SkelligeAu/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/raw"
+	"github.com/SkelligeAu/origin/internal/sigstore"
 )
 
 // FailureRecord is the JSON payload stored as raw evidence for a

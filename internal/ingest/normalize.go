@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/fitzee/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/assertion"
 )
 
 // Normalizer versions are constants in code. They are also written into

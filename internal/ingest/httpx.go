@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const userAgent = "origin/0.1.0 (+https://github.com/fitzee/origin)"
+const userAgent = "origin/0.1.0 (+https://github.com/SkelligeAu/origin)"
 
 // httpGet performs a GET with a sane timeout and our UA. It returns the
 // status code, response bytes, and any transport error.

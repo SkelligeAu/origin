@@ -11,13 +11,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/fitzee/origin/internal/assertion"
-	"github.com/fitzee/origin/internal/chain"
-	"github.com/fitzee/origin/internal/keys"
-	"github.com/fitzee/origin/internal/peerimport"
-	"github.com/fitzee/origin/internal/peers"
-	"github.com/fitzee/origin/internal/raw"
-	"github.com/fitzee/origin/internal/vocab"
+	"github.com/SkelligeAu/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/chain"
+	"github.com/SkelligeAu/origin/internal/keys"
+	"github.com/SkelligeAu/origin/internal/peerimport"
+	"github.com/SkelligeAu/origin/internal/peers"
+	"github.com/SkelligeAu/origin/internal/raw"
+	"github.com/SkelligeAu/origin/internal/vocab"
 )
 
 // TestFederation_RewriteRule exercises the protocol's core federation

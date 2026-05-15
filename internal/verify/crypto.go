@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/fitzee/origin/internal/assertion"
-	"github.com/fitzee/origin/internal/raw"
-	"github.com/fitzee/origin/internal/sigstore"
+	"github.com/SkelligeAu/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/raw"
+	"github.com/SkelligeAu/origin/internal/sigstore"
 )
 
 // checkCryptoReverify re-executes Sigstore verification for every

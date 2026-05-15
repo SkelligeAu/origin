@@ -8,16 +8,16 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/fitzee/origin/internal/anchor"
-	"github.com/fitzee/origin/internal/checkpoint"
-	"github.com/fitzee/origin/internal/demo"
-	"github.com/fitzee/origin/internal/eval"
-	"github.com/fitzee/origin/internal/explain"
-	"github.com/fitzee/origin/internal/ingest"
-	"github.com/fitzee/origin/internal/peerimport"
-	"github.com/fitzee/origin/internal/project"
-	"github.com/fitzee/origin/internal/report"
-	"github.com/fitzee/origin/internal/verify"
+	"github.com/SkelligeAu/origin/internal/anchor"
+	"github.com/SkelligeAu/origin/internal/checkpoint"
+	"github.com/SkelligeAu/origin/internal/demo"
+	"github.com/SkelligeAu/origin/internal/eval"
+	"github.com/SkelligeAu/origin/internal/explain"
+	"github.com/SkelligeAu/origin/internal/ingest"
+	"github.com/SkelligeAu/origin/internal/peerimport"
+	"github.com/SkelligeAu/origin/internal/project"
+	"github.com/SkelligeAu/origin/internal/report"
+	"github.com/SkelligeAu/origin/internal/verify"
 )
 
 const usage = `origin — provenance-backed trust evaluation (Day-1 prototype)

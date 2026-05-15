@@ -1,4 +1,4 @@
-module github.com/fitzee/origin
+module github.com/SkelligeAu/origin
 
 go 1.26.2
 

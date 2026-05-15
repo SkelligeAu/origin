@@ -31,7 +31,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/fitzee/origin/internal/canon"
+	"github.com/SkelligeAu/origin/internal/canon"
 )
 
 // Envelope is the canonical content of a checkpoint. JCS-canonicalised

@@ -8,11 +8,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/fitzee/origin/internal/assertion"
-	"github.com/fitzee/origin/internal/chain"
-	"github.com/fitzee/origin/internal/checkpoint"
-	"github.com/fitzee/origin/internal/keys"
-	"github.com/fitzee/origin/internal/raw"
+	"github.com/SkelligeAu/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/chain"
+	"github.com/SkelligeAu/origin/internal/checkpoint"
+	"github.com/SkelligeAu/origin/internal/keys"
+	"github.com/SkelligeAu/origin/internal/raw"
 )
 
 // checkAnchorIntegrity is verify check #13 (Phase 5).

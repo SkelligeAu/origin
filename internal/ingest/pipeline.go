@@ -4,8 +4,8 @@ import (
 	"crypto/ed25519"
 	"fmt"
 
-	"github.com/fitzee/origin/internal/assertion"
-	"github.com/fitzee/origin/internal/vocab"
+	"github.com/SkelligeAu/origin/internal/assertion"
+	"github.com/SkelligeAu/origin/internal/vocab"
 )
 
 // emitter wires the IdentityStore + OccurrenceLog + signing key into a
