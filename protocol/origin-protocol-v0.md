@@ -1,8 +1,10 @@
 # Origin Protocol, version 0
 
-**Status:** v0. This document specifies the canonical data, behaviour, and conformance requirements for an Origin-conformant implementation as of the v0.1.0 reference release. It covers project phases 1 through 5 inclusive: identity / occurrence envelopes, local cryptographic verification, federation with the no-laundering rule, transparency-log anchoring, and the full verify procedure.
+**Status:** v0. This document specifies the canonical data, behaviour, and conformance requirements for an Origin-conformant implementation.
 
-**Authoritative.** Implementation behaviour MUST conform to this document. Where the implementation diverges from this document, either the implementation is incorrect or a new revision (v1) is required. Silent edits to this document are forbidden.
+**Revision:** `v0.1.0` (2026-05-15). The full revision policy is normative and lives in §0.1.
+
+**Authoritative.** Implementation behaviour MUST conform to this document. Where the implementation diverges from this document, either the implementation is incorrect or a new revision is required (see §0.1 for what change class is required). Silent edits to this document are forbidden.
 
 **Out of scope.** Future revisions (v1+) will incorporate independence semantics for corroboration, an identity-entity layer, inclusion-proof verification against transparency logs, and other open items from `memory/epistemic-model.v1.md` §11. None of those are normative here.
 
@@ -21,6 +23,29 @@ Cryptographic primitives referenced:
 - **Ed25519** — RFC 8032.
 
 All identifiers and signatures use lowercase hexadecimal encoding unless otherwise specified.
+
+### 0.1 Specification revisioning
+
+This specification is versioned independently of implementation releases.
+
+The spec carries a `Revision:` line at the top of the document. An implementation is conformant to the exact revision named there, e.g. `v0.1.0`.
+
+Revision classes:
+
+- **Patch** (`v0.N.M`) — editorial corrections, typo fixes, clarifications, and non-normative examples. A patch revision MUST NOT change any canonical bytes produced by a conformant implementation, MUST NOT change fixture expected outputs, MUST NOT add or remove verification requirements, and MUST NOT alter conformance language.
+- **Minor** (`v0.N.0`) — additive protocol changes only. A minor revision MAY add predicates, fixtures, optional behaviours, verify checks, or conformance requirements. A minor revision MUST NOT change canonical bytes for existing artefacts, MUST NOT alter existing fixture expected outputs, MUST NOT relax a MUST, and MUST NOT redefine existing predicates, envelope fields, verification classes, or federation rewrite rules.
+- **Major** (`vN.0.0`) — breaking semantic or canonical changes. A major revision is required for any change that alters canonical bytes for an existing artefact, removes or redefines a verify check, changes an existing envelope field's meaning, alters the federation rewrite rule, changes no-laundering semantics, or relaxes an existing MUST. A major revision MUST use a new spec file (e.g., `origin-protocol-v1.md`) and MUST provide a fresh fixture corpus.
+
+Existing minor revisions remain valid conformance targets. For example, an implementation conforming to `v0.1.0` remains honestly labelled `v0.1.0-conformant` after `v0.2.0` is published, but it is not `v0.2.0-conformant` unless it implements the new mandatory requirements.
+
+Fixture policy:
+
+- Each spec revision names the fixture corpus it governs.
+- Patch revisions MUST NOT alter existing fixtures.
+- Minor revisions MAY add fixtures but MUST NOT change existing fixture bytes or expected IDs.
+- Major revisions MAY replace the fixture corpus, but prior fixture corpora remain archived.
+
+Every spec revision MUST add one row to the Document history table identifying the revision, date, class, and rationale.
 
 ---
 
@@ -607,7 +632,7 @@ A conforming implementation MUST support a `verify` operation that performs the 
 
 ## 14. Conformance
 
-An "Origin Protocol v0 conformant" implementation MUST satisfy:
+Conformance is to a specific spec revision, named at the top of the document (see §0.1). The conformance label is `v<R>-conformant` where `<R>` is the revision tag (e.g., `v0.1.0-conformant`). An implementation MUST satisfy every mandatory item below for the named revision; it MAY also satisfy the optional items.
 
 **Mandatory:**
 
@@ -790,6 +815,6 @@ If any of these is not achievable from this document + fixture, the document has
 
 ## Document history
 
-| Version | Date | Notes |
-|---|---|---|
-| v0 | 2026-05-15 | Initial release. Covers project phases 1-5: identity / occurrence / claim envelopes (§3-§5), raw evidence (§6), vocabulary v6 (§7, Appendix A), identity store + occurrence log (§8-§9), filesystem federation with the no-laundering rule (§10), transparency anchoring (§11), policy execution (§12), and the thirteen verify checks (§13). |
+| Revision | Date | Class | Notes |
+|---|---|---|---|
+| `v0.1.0` | 2026-05-15 | minor (initial) | First published revision. Covers identity / occurrence / claim envelopes (§3-§5), raw evidence (§6), vocabulary v6 (§7, Appendix A), identity store + occurrence log (§8-§9), filesystem federation with the no-laundering rule (§10), transparency anchoring (§11), policy execution (§12), and the thirteen verify checks (§13). Earlier phase-3.5 draft text was never published and therefore not separately revisioned. |
