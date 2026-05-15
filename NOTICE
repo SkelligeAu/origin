@@ -1,0 +1,11 @@
+Origin
+Copyright 2026 Skellige Pty Ltd
+
+This product is licensed under the Apache License, Version 2.0
+(see LICENSE).
+
+This product includes the Sigstore public-good trusted-root reference
+data, embedded in source at internal/sigstore/trusted_root_public_good.json.
+The reference data is sourced from the sigstore-go project
+(github.com/sigstore/sigstore-go) which is Copyright 2023 The Sigstore
+Authors and is also licensed under the Apache License, Version 2.0.
