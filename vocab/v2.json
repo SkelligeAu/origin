@@ -1,0 +1,52 @@
+{
+  "version": "v2",
+  "supersedes": "v1",
+  "predicates": {
+    "depends_on": {
+      "subject_kind": "artifact",
+      "object_kind": "artifact",
+      "description": "Resolved dependency relation between two releases."
+    },
+    "registry_reports_signing_key": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "description": "An ecosystem registry's metadata associates this artifact with this signing key. OBSERVATION ONLY: no cryptographic verification performed against artifact bytes. Policies requiring strong evidence MUST require `cryptographically_verified_signature_by`."
+    },
+    "cryptographically_verified_signature_by": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "description": "A signature over the artifact's bytes was fetched AND validated by this binary, in this run, against a known public key whose trust chain anchors to a pinned root (Fulcio public-good root for Sigstore). This is a VERIFICATION outcome, not a registry claim. Invariant 16: may only be emitted from locally executed verification — never inherited from upstream registry claims, federated peers, or third-party verifiers."
+    },
+    "published_by": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "description": "Identity recorded by the registry as publisher of a release."
+    },
+    "published_at": {
+      "subject_kind": "artifact",
+      "object_kind": "literal",
+      "object_datatype": "xsd:dateTime",
+      "description": "Release timestamp as recorded by the registry."
+    },
+    "affected_by": {
+      "subject_kind": "artifact",
+      "object_kind": "vulnerability_iri",
+      "description": "Artifact is affected by a vulnerability advisory."
+    },
+    "attests_to": {
+      "subject_kind": "attestation",
+      "object_kind": "any",
+      "description": "Attestation envelope refers to a subject."
+    },
+    "revises": {
+      "subject_kind": "assertion",
+      "object_kind": "assertion",
+      "description": "Supersession edge: this assertion replaces another. Meta-predicate."
+    },
+    "derived_from": {
+      "subject_kind": "assertion",
+      "object_kind": "assertion_or_claim",
+      "description": "Second-order claim provenance. Meta-predicate."
+    }
+  }
+}

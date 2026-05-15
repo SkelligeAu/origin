@@ -1,0 +1,9 @@
+{
+  "checkpoint": {
+    "log_id": "log:b3a90737fcb17248",
+    "seq": 1,
+    "chain_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+    "signed_at": "2026-01-01T00:00:00Z"
+  },
+  "signature": "ed25519:b3a90737fcb17248:CqusdGNPB1HIF8WMjet6UABpqoqSf6Yqe2x/Posn3L7YxQ7H7x6+k32q6LBZqM0PS/n1xAlYyW51V0hDz02TCA=="
+}

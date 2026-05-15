@@ -1,0 +1,57 @@
+{
+  "version": "v3",
+  "supersedes": "v2",
+  "predicates": {
+    "depends_on": {
+      "subject_kind": "artifact",
+      "object_kind": "artifact",
+      "description": "Resolved dependency relation between two releases."
+    },
+    "registry_reports_signing_key": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "description": "An ecosystem registry's metadata associates this artifact with this signing key. OBSERVATION ONLY: no cryptographic verification performed against artifact bytes. Policies requiring strong evidence MUST require `cryptographically_verified_signature_by`."
+    },
+    "cryptographically_verified_signature_by": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "description": "A signature over the artifact's bytes was fetched AND validated by this binary, in this run, against a known public key whose trust chain anchors to a pinned root (Fulcio public-good root for Sigstore). This is a VERIFICATION outcome, not a registry claim. Invariant 16: may only be emitted from locally executed verification — never inherited from upstream registry claims, federated peers, or third-party verifiers."
+    },
+    "cryptographic_verification_failed": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "description": "This binary executed cryptographic verification of an attestation for the artifact and the verification did NOT succeed. The attestation's best-effort claimed identity is the object; when the bundle was unparseable, a synthetic 'sigstore:unparseable_bundle:<hash>' IRI is used so the assertion can still be emitted and the bundle cited. The structured reason code (bundle_parse_failed, signature_invalid, certificate_chain_invalid, transparency_log_proof_invalid, subject_digest_mismatch, oidc_subject_coherence_failed, input_invalid, unknown) is recorded in the assertion's evidence sidecar (a sigstore.verification_failure raw record). OBSERVATIONAL of our own verification attempt — does NOT imply anything about the artifact's underlying signing relation; an attestation that fails our verifier may still be correct under some other verifier, and we make no claim either way. Refutation class per epistemic-model.v1.md §1.3."
+    },
+    "published_by": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "description": "Identity recorded by the registry as publisher of a release."
+    },
+    "published_at": {
+      "subject_kind": "artifact",
+      "object_kind": "literal",
+      "object_datatype": "xsd:dateTime",
+      "description": "Release timestamp as recorded by the registry."
+    },
+    "affected_by": {
+      "subject_kind": "artifact",
+      "object_kind": "vulnerability_iri",
+      "description": "Artifact is affected by a vulnerability advisory."
+    },
+    "attests_to": {
+      "subject_kind": "attestation",
+      "object_kind": "any",
+      "description": "Attestation envelope refers to a subject."
+    },
+    "revises": {
+      "subject_kind": "assertion",
+      "object_kind": "assertion",
+      "description": "Supersession edge: this assertion replaces another. Meta-predicate."
+    },
+    "derived_from": {
+      "subject_kind": "assertion",
+      "object_kind": "assertion_or_claim",
+      "description": "Second-order claim provenance. Meta-predicate."
+    }
+  }
+}

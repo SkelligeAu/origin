@@ -1,0 +1,67 @@
+{
+  "version": "v4",
+  "supersedes": "v3",
+  "predicates": {
+    "depends_on": {
+      "subject_kind": "artifact",
+      "object_kind": "artifact",
+      "verification_class": "observation",
+      "description": "Resolved dependency relation between two releases."
+    },
+    "registry_reports_signing_key": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "verification_class": "observation",
+      "description": "An ecosystem registry's metadata associates this artifact with this signing key. OBSERVATION ONLY: no cryptographic verification performed against artifact bytes. Policies requiring strong evidence MUST require `cryptographically_verified_signature_by`."
+    },
+    "cryptographically_verified_signature_by": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "verification_class": "verification",
+      "description": "A signature over the artifact's bytes was fetched AND validated by this binary, in this run, against a known public key whose trust chain anchors to a pinned root (Fulcio public-good root for Sigstore). VERIFICATION class: occurrences naming this predicate MUST have attestor_role = verifier (epistemic-model.v1.md §3, invariant 16, layer-3.md §9). Federation imports may NEVER carry this predicate; at the boundary they are rewritten as peer_reports_* observation predicates."
+    },
+    "cryptographic_verification_failed": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "verification_class": "refutation",
+      "description": "This binary executed cryptographic verification of an attestation for the artifact and the verification did NOT succeed. The structured reason code (bundle_parse_failed, signature_invalid, certificate_chain_invalid, transparency_log_proof_invalid, subject_digest_mismatch, oidc_subject_coherence_failed, input_invalid, unknown) is recorded in the assertion's evidence sidecar (a sigstore.verification_failure raw record). REFUTATION class: positive evidence about our own verifier's behaviour, not a claim about the artifact (epistemic-model.v1.md §7.3). Occurrences naming this predicate MUST have attestor_role = verifier."
+    },
+    "published_by": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "verification_class": "observation",
+      "description": "Identity recorded by the registry as publisher of a release."
+    },
+    "published_at": {
+      "subject_kind": "artifact",
+      "object_kind": "literal",
+      "object_datatype": "xsd:dateTime",
+      "verification_class": "observation",
+      "description": "Release timestamp as recorded by the registry."
+    },
+    "affected_by": {
+      "subject_kind": "artifact",
+      "object_kind": "vulnerability_iri",
+      "verification_class": "observation",
+      "description": "Artifact is affected by a vulnerability advisory."
+    },
+    "attests_to": {
+      "subject_kind": "attestation",
+      "object_kind": "any",
+      "verification_class": "observation",
+      "description": "Attestation envelope refers to a subject."
+    },
+    "revises": {
+      "subject_kind": "assertion",
+      "object_kind": "assertion",
+      "verification_class": "structural",
+      "description": "Supersession edge: this identity replaces another. Meta-predicate; carries no truth about the world, only about the log's organisation."
+    },
+    "derived_from": {
+      "subject_kind": "assertion",
+      "object_kind": "assertion_or_claim",
+      "verification_class": "structural",
+      "description": "Second-order claim provenance. Meta-predicate."
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "4680a6381067f49ff38aa71cc75deb13a0252ef16079d733787a6790a3ad2c14",
+  "subject": "checkpoint:eebb5ce423600327d6eab473f57a5f818b7eaf79b1bab3f9fbaba490e24c081c",
+  "predicate": "transparency_log_records_checkpoint",
+  "object": {
+    "kind": "iri",
+    "iri": "fakelog:fixture:1"
+  },
+  "evidence_id": "a531599b879f6de0362288f1799867bf6ffd9b5b8c5400c6b4942414334ed765",
+  "observed_at": "2026-01-01T00:00:00Z",
+  "normalizer": "transparency-anchor-recorder@v0.1.0",
+  "vocab": "v6",
+  "revises": null
+}

@@ -1,0 +1,19 @@
+{
+  "id": "release_signing",
+  "version": "v2",
+  "vocab_required": "v2",
+  "required_predicates": [
+    "registry_reports_signing_key",
+    "cryptographically_verified_signature_by",
+    "published_at",
+    "published_by"
+  ],
+  "required_raw_sources": ["npm.registry", "sigstore.rekor", "npm.attestations"],
+  "neighborhood_depth": 0,
+  "allowed_verdicts": ["trusted", "conditional", "rejected", "insufficient_evidence"],
+  "queries": {
+    "verdict": "data.release_signing.verdict",
+    "qualifiers": "data.release_signing.qualifiers",
+    "trace": "data.release_signing.trace"
+  }
+}

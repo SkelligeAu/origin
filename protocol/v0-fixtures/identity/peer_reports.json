@@ -1,0 +1,14 @@
+{
+  "id": "e4e3ab1e254dc70a90ec507c378d81f8ffe171b96a09c417278721ca66fda451",
+  "subject": "pkg:npm/example@1.0.0",
+  "predicate": "peer_reports_cryptographic_verification_of",
+  "object": {
+    "kind": "ref",
+    "ref": "72fbdb786e3b9e7b278482b6c9d18b961e261413e6079c6156c887c3439b92d7"
+  },
+  "evidence_id": "0000000000000000000000000000000000000000000000000000000000000001",
+  "observed_at": "2026-01-01T00:00:00Z",
+  "normalizer": "federation-import@v0.1.0",
+  "vocab": "v5",
+  "revises": null
+}

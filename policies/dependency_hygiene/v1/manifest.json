@@ -1,0 +1,14 @@
+{
+  "id": "dependency_hygiene",
+  "version": "v1",
+  "vocab_required": "v1",
+  "required_predicates": ["depends_on", "affected_by"],
+  "required_raw_sources": ["osv.dev"],
+  "neighborhood_depth": 1,
+  "allowed_verdicts": ["trusted", "conditional", "rejected", "insufficient_evidence"],
+  "queries": {
+    "verdict": "data.dependency_hygiene.verdict",
+    "qualifiers": "data.dependency_hygiene.qualifiers",
+    "trace": "data.dependency_hygiene.trace"
+  }
+}

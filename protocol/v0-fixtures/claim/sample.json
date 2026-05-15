@@ -1,0 +1,41 @@
+{
+  "derivation": {
+    "input_counts": {
+      "registry_reports_signing_key": 1
+    },
+    "missing_predicates": null,
+    "occurrences_cited": {
+      "f785e5fc8324c68bb186e4f3247279186dc6d882c49385ce3862731b4c29a459": [
+        "f7fc12d4f2eb44c71a1f068ddbcb2f5520b4eaadef5cb89c2654abd8f6b35d4b"
+      ]
+    },
+    "rules_fired": [
+      "a_rule"
+    ]
+  },
+  "evaluated_at": "2026-01-01T00:00:01Z",
+  "evaluator_version": "fixture-evaluator@v0.1.0",
+  "id": "f246782d48043aacf9a62da6fa3905806a67f85f9db869535ffac4996baa1f51",
+  "identities_hash": "def456",
+  "identity_ids_consumed": [
+    "f785e5fc8324c68bb186e4f3247279186dc6d882c49385ce3862731b4c29a459"
+  ],
+  "normalizer_versions": {
+    "fixture-normalizer": "v0.1.0"
+  },
+  "policy_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+  "policy_id": "fixture-policy",
+  "policy_version": "v1",
+  "projection_manifest_hash": "abc123",
+  "qualifiers": [
+    "a_qualifier",
+    "another_qualifier"
+  ],
+  "query": "data.fixture.verdict",
+  "raw_evidence_ids_consumed": [
+    "d645008cafdc2b664d272b4016898ad3c73200d7ad8b16486e77288cbf5cc3ed"
+  ],
+  "subject": "pkg:npm/example@1.0.0",
+  "verdict": "trusted",
+  "vocab_version": "v5"
+}

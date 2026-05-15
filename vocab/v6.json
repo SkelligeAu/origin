@@ -1,0 +1,91 @@
+{
+  "version": "v6",
+  "supersedes": "v5",
+  "predicates": {
+    "depends_on": {
+      "subject_kind": "artifact",
+      "object_kind": "artifact",
+      "verification_class": "observation",
+      "description": "Resolved dependency relation between two releases."
+    },
+    "registry_reports_signing_key": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "verification_class": "observation",
+      "description": "An ecosystem registry's metadata associates this artifact with this signing key. OBSERVATION ONLY: no cryptographic verification performed against artifact bytes. Policies requiring strong evidence MUST require `cryptographically_verified_signature_by`."
+    },
+    "cryptographically_verified_signature_by": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "verification_class": "verification",
+      "description": "A signature over the artifact's bytes was fetched AND validated by this binary, in this run, against a known public key whose trust chain anchors to a pinned root (Fulcio public-good root for Sigstore). VERIFICATION class: occurrences naming this predicate MUST have attestor_role = verifier (epistemic-model.v1.md §3, invariant 16, layer-3.md §9). Federation imports may NEVER carry this predicate; at the boundary they are rewritten as peer_reports_* observation predicates."
+    },
+    "cryptographic_verification_failed": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "verification_class": "refutation",
+      "description": "This binary executed cryptographic verification of an attestation for the artifact and the verification did NOT succeed. The structured reason code (bundle_parse_failed, signature_invalid, certificate_chain_invalid, transparency_log_proof_invalid, subject_digest_mismatch, oidc_subject_coherence_failed, input_invalid, unknown) is recorded in the assertion's evidence sidecar (a sigstore.verification_failure raw record). REFUTATION class: positive evidence about our own verifier's behaviour, not a claim about the artifact (epistemic-model.v1.md §7.3). Occurrences naming this predicate MUST have attestor_role = verifier."
+    },
+    "published_by": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "verification_class": "observation",
+      "description": "Identity recorded by the registry as publisher of a release."
+    },
+    "published_at": {
+      "subject_kind": "artifact",
+      "object_kind": "literal",
+      "object_datatype": "xsd:dateTime",
+      "verification_class": "observation",
+      "description": "Release timestamp as recorded by the registry."
+    },
+    "affected_by": {
+      "subject_kind": "artifact",
+      "object_kind": "vulnerability_iri",
+      "verification_class": "observation",
+      "description": "Artifact is affected by a vulnerability advisory."
+    },
+    "attests_to": {
+      "subject_kind": "attestation",
+      "object_kind": "any",
+      "verification_class": "observation",
+      "description": "Attestation envelope refers to a subject."
+    },
+    "revises": {
+      "subject_kind": "assertion",
+      "object_kind": "assertion",
+      "verification_class": "structural",
+      "description": "Supersession edge: this identity replaces another. Meta-predicate; carries no truth about the world, only about the log's organisation."
+    },
+    "derived_from": {
+      "subject_kind": "assertion",
+      "object_kind": "assertion_or_claim",
+      "verification_class": "structural",
+      "description": "Second-order claim provenance. Meta-predicate."
+    },
+    "peer_reports_cryptographic_verification_of": {
+      "subject_kind": "artifact",
+      "object_kind": "ref",
+      "verification_class": "observation",
+      "description": "A federated peer claims to have cryptographically verified a signature for the artifact. The object is a ref to the foreign identity ID; the foreign verified-form identity is NOT stored locally (layer-3.5.md §1, invariant 16). OBSERVATION class: we did not verify anything ourselves. Promotion to local verified-form requires running the local verifier."
+    },
+    "peer_reports_cryptographic_verification_failed_of": {
+      "subject_kind": "artifact",
+      "object_kind": "ref",
+      "verification_class": "observation",
+      "description": "A federated peer claims their verifier rejected an attestation for the artifact. The object is a ref to the foreign identity ID. OBSERVATION class: the peer's negative judgement is our observation, not our refutation."
+    },
+    "transparency_log_records_checkpoint": {
+      "subject_kind": "checkpoint",
+      "object_kind": "iri",
+      "verification_class": "observation",
+      "description": "The local node submitted a checkpoint (a signed local-chain summary) to a transparency system and recorded the system's response. OBSERVATION class: the assertion records what was returned, not whether the timestamp is accurate, the provider is trustworthy, or the underlying log content is true. The evidence_id points at the bytes the provider returned. The subject is a checkpoint:<sha256> IRI naming a local checkpoint raw evidence record. Phase 5: tamper-evidence is strengthened by verify check #13, which cross-references the checkpoint's recorded (log_id, seq, chain_hash) triple against the current local chain. Inclusion-proof verification (a verification-class predicate) is deferred to Phase 5.5."
+    },
+    "peer_reports_transparency_log_records_checkpoint_of": {
+      "subject_kind": "checkpoint",
+      "object_kind": "ref",
+      "verification_class": "observation",
+      "description": "A federated peer claims to have observed an anchor record for the named checkpoint. The object is a ref to the peer's foreign anchor identity ID. OBSERVATION class: this is our observation of the peer's observation; it inherits no authority from the original transparency system. Reserved in vocab v6 but typically NOT minted at the federation boundary — anchor identities are observation-class already and pass through unchanged. Implementations MAY mint this predicate if a policy author wants a structurally distinct per-source predicate; the canonical alternative is to join the occurrences table on attestor_role and log_id."
+    }
+  }
+}

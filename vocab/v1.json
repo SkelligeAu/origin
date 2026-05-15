@@ -1,0 +1,46 @@
+{
+  "version": "v1",
+  "predicates": {
+    "depends_on": {
+      "subject_kind": "artifact",
+      "object_kind": "artifact",
+      "description": "Resolved dependency relation between two releases."
+    },
+    "registry_reports_signing_key": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "description": "An ecosystem registry's metadata associates this artifact with this signing key. This is an OBSERVATION of what the registry claims; NO cryptographic verification of the signature against the artifact bytes has been performed. Policies requiring strong evidence must require `cryptographically_verified_signature_by` (Phase-2 predicate, not yet emitted)."
+    },
+    "published_by": {
+      "subject_kind": "artifact",
+      "object_kind": "identity",
+      "description": "Identity recorded by the registry as publisher of a release."
+    },
+    "published_at": {
+      "subject_kind": "artifact",
+      "object_kind": "literal",
+      "object_datatype": "xsd:dateTime",
+      "description": "Release timestamp as recorded by the registry."
+    },
+    "affected_by": {
+      "subject_kind": "artifact",
+      "object_kind": "vulnerability_iri",
+      "description": "Artifact is affected by a vulnerability advisory."
+    },
+    "attests_to": {
+      "subject_kind": "attestation",
+      "object_kind": "any",
+      "description": "Attestation envelope refers to a subject."
+    },
+    "revises": {
+      "subject_kind": "assertion",
+      "object_kind": "assertion",
+      "description": "Supersession edge: this assertion replaces another. Meta-predicate."
+    },
+    "derived_from": {
+      "subject_kind": "assertion",
+      "object_kind": "assertion_or_claim",
+      "description": "Second-order claim provenance. Meta-predicate."
+    }
+  }
+}

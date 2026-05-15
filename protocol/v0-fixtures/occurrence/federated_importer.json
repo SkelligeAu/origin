@@ -1,0 +1,11 @@
+{
+  "id": "3ebfab0f53f88e23833c8d12d2a48e4fc669c2c1aacf6b0a1c709974ce761eba",
+  "identity_id": "e4e3ab1e254dc70a90ec507c378d81f8ffe171b96a09c417278721ca66fda451",
+  "attestor": "peer:log:fixture-peer",
+  "attestor_role": "federated_importer",
+  "ingested_at": "2026-01-02T00:00:00Z",
+  "log_id": "log:b3a90737fcb17248",
+  "prev_chain_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "chain_hash": "38e26f1b8a1bdae6eae107fc9a87b9d9bf1f938ea7b77691037252daf0c2069c",
+  "signature": "ed25519:b3a90737fcb17248:1cn2EjFSwM/cV1aYjKvP2Y8OPBEkHShs8N+QIDRYziNNinBHwt7O0lCMw9m1LDWJURJbeMnS0ZdDPX1j0RpeCw=="
+}

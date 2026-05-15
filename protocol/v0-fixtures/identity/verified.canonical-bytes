@@ -1,0 +1,1 @@
+{"evidence_id":"0000000000000000000000000000000000000000000000000000000000000001","normalizer":"fixture-verifier@v0.1.0","object":{"iri":"sigstore:fulcio:fixture-identity","kind":"iri"},"observed_at":"2026-01-01T00:00:00Z","predicate":"cryptographically_verified_signature_by","revises":null,"subject":"pkg:npm/example@1.0.0","vocab":"v5"}

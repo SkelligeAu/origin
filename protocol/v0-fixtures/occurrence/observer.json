@@ -1,0 +1,11 @@
+{
+  "id": "f7fc12d4f2eb44c71a1f068ddbcb2f5520b4eaadef5cb89c2654abd8f6b35d4b",
+  "identity_id": "f785e5fc8324c68bb186e4f3247279186dc6d882c49385ce3862731b4c29a459",
+  "attestor": "ingestor:fixture@v0.1.0:b3a90737fcb17248",
+  "attestor_role": "observer",
+  "ingested_at": "2026-01-01T00:00:00Z",
+  "log_id": "log:b3a90737fcb17248",
+  "prev_chain_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "chain_hash": "adf74c4a297f4a89977eeeb935d71e6b9c97bf1fc9101643bf43adff049a9f1d",
+  "signature": "ed25519:b3a90737fcb17248:UQG2OGPvgkkkWzFO6SZJkIUkjpeq5ZdqWdOISGHzbOjaa/djGTu6BkEw1GwsHSxREkkNSZ7S6ez95gs8Z3miAQ=="
+}

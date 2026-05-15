@@ -1,0 +1,14 @@
+{
+  "id": "f785e5fc8324c68bb186e4f3247279186dc6d882c49385ce3862731b4c29a459",
+  "subject": "pkg:npm/example@1.0.0",
+  "predicate": "registry_reports_signing_key",
+  "object": {
+    "kind": "iri",
+    "iri": "npm:key:fixture-key"
+  },
+  "evidence_id": "0000000000000000000000000000000000000000000000000000000000000001",
+  "observed_at": "2026-01-01T00:00:00Z",
+  "normalizer": "fixture-normalizer@v0.1.0",
+  "vocab": "v5",
+  "revises": null
+}

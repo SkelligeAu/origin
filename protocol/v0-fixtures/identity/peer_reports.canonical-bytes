@@ -1,0 +1,1 @@
+{"evidence_id":"0000000000000000000000000000000000000000000000000000000000000001","normalizer":"federation-import@v0.1.0","object":{"kind":"ref","ref":"72fbdb786e3b9e7b278482b6c9d18b961e261413e6079c6156c887c3439b92d7"},"observed_at":"2026-01-01T00:00:00Z","predicate":"peer_reports_cryptographic_verification_of","revises":null,"subject":"pkg:npm/example@1.0.0","vocab":"v5"}
