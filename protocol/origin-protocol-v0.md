@@ -1,10 +1,10 @@
 # Origin Protocol, version 0
 
-**Status:** Draft v0. This document specifies the canonical data, behaviour, and conformance requirements for an Origin-conformant implementation as of project phase 3.5.
+**Status:** v0. This document specifies the canonical data, behaviour, and conformance requirements for an Origin-conformant implementation as of the v0.1.0 reference release. It covers project phases 1 through 5 inclusive: identity / occurrence envelopes, local cryptographic verification, federation with the no-laundering rule, transparency-log anchoring, and the full verify procedure.
 
 **Authoritative.** Implementation behaviour MUST conform to this document. Where the implementation diverges from this document, either the implementation is incorrect or a new revision (v1) is required. Silent edits to this document are forbidden.
 
-**Out of scope.** This document specifies only what has been implemented through phase 3.5. Future revisions (v1+) will incorporate independence semantics, identity-entity layer, transparency-log anchoring, and other open items from `memory/epistemic-model.v1.md` §11. None of those are normative here.
+**Out of scope.** Future revisions (v1+) will incorporate independence semantics for corroboration, an identity-entity layer, inclusion-proof verification against transparency logs, and other open items from `memory/epistemic-model.v1.md` §11. None of those are normative here.
 
 ---
 
@@ -12,7 +12,7 @@
 
 This document uses the keywords MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY per RFC 2119, restricted to the lowercase rendering where the visual emphasis is unnecessary.
 
-An "Origin v0 implementation" is software that produces and verifies the artefacts defined in §3–§9 such that the byte-equality requirements in §13 hold against the test fixtures in `protocol/v0-fixtures/`. An implementation MAY add features beyond v0; it MUST NOT relax v0 requirements.
+An "Origin v0 implementation" is software that produces and verifies the artefacts defined in §3–§11 such that the byte-equality requirements in §14 hold against the test fixtures in `protocol/v0-fixtures/`. An implementation MAY add features beyond v0; it MUST NOT relax v0 requirements.
 
 Cryptographic primitives referenced:
 
@@ -36,6 +36,8 @@ All identifiers and signatures use lowercase hexadecimal encoding unless otherwi
 - **Log** — A per-`log_id` append-only stream of Occurrences plus its chain.log (§9).
 - **Vocabulary** — A versioned, signed document declaring the set of valid predicates and their verification classes (§7).
 - **Peer** — Another Origin v0 implementation whose log can be imported (§10).
+- **Checkpoint** — A signed snapshot of a local log at one moment, of the form `{log_id, seq, chain_hash, signed_at}` plus an Ed25519 signature (§11.1). Content-addressable; named in identities by the IRI `checkpoint:<sha256>`.
+- **Anchor** — An observation-class Identity whose predicate is `transparency_log_records_checkpoint`, citing a Checkpoint as its subject and the transparency provider's response as its raw evidence (§11.2). Records that the local node submitted a Checkpoint to an external transparency system; does not assert that the provider is honest.
 
 ---
 
@@ -160,7 +162,7 @@ Exactly one of:
 
 - **`observer`** — The producing activity was a normalizer transcribing source bytes into an assertion (§7.2 observation class).
 - **`verifier`** — The producing activity was a locally executed verification procedure (§7.2 verification or refutation class).
-- **`federated_importer`** — This Occurrence was emitted by the local node at the import boundary while ingesting a peer's log (§10). MUST cite an Identity whose predicate has verification_class ∈ {observation, structural}. This is the no-laundering rule (§12 check #12).
+- **`federated_importer`** — This Occurrence was emitted by the local node at the import boundary while ingesting a peer's log (§10). MUST cite an Identity whose predicate has verification_class ∈ {observation, structural}. This is the no-laundering rule (§13 check #12).
 
 ### 4.5 Chain hash
 
@@ -287,7 +289,7 @@ A signed JSON sidecar at `<root>/<source>/<yyyy-mm-dd>/<sha256>.json` with field
 
 The signature is over the canonical (JCS) bytes of the metadata object with the `signature` field absent. The payload bytes are referenced by hash; tampering is detected because the filename and `payload_hash` no longer agree with the bytes.
 
-`fetched_at`, `fetcher`, and `payload_path` are local-event metadata; they MUST NOT participate in the federation-stable `identities_hash` computation (§11.3).
+`fetched_at`, `fetcher`, and `payload_path` are local-event metadata; they MUST NOT participate in the federation-stable `identities_hash` computation (§12.4).
 
 ---
 
@@ -443,15 +445,91 @@ Other verification/refutation predicates introduced in future vocabularies MUST 
 
 ### 10.5 The no-laundering rule
 
-A `federated_importer`-role Occurrence MUST cite an Identity whose predicate has verification_class ∈ {observation, structural}. Implementations MUST refuse such writes at import time AND MUST detect violations at verify time (§12 check #12).
+A `federated_importer`-role Occurrence MUST cite an Identity whose predicate has verification_class ∈ {observation, structural}. Implementations MUST refuse such writes at import time AND MUST detect violations at verify time (§13 check #12).
 
 This rule preserves invariant 16 (verification locality) across federation boundaries.
 
 ---
 
-## 11. Policy execution
+## 11. Anchoring
 
-### 11.1 Policy structure
+Anchoring records that the local node has submitted a snapshot of its log to an external append-only system (a transparency log, a git ref, a signed pastebin — anything whose history is independently observable). The protocol does not depend on any particular provider, does not trust the provider as an authority, and does not adjudicate provider honesty. An anchor is evidence the operator submitted *something*; verification check #13 binds that evidence back to the local chain.
+
+### 11.1 Checkpoint envelope
+
+A Checkpoint is a small signed JSON document summarising the local log at one moment:
+
+| Field | Type | Required | Constraints |
+|---|---|---|---|
+| `log_id` | string | yes | The local log_id whose head is being snapshotted. |
+| `seq` | integer | yes | The sequence number of the chain head being signed. MUST be > 0. |
+| `chain_hash` | string | yes | The chain_hash at that seq, 64 lowercase hex characters. |
+| `signed_at` | string | yes | RFC 3339 UTC timestamp. |
+
+The Checkpoint is wrapped in a Signed envelope:
+
+```
+{
+  "checkpoint": { "log_id": ..., "seq": ..., "chain_hash": ..., "signed_at": ... },
+  "signature":  "ed25519:<key-fingerprint>:<base64(sig)>"
+}
+```
+
+`signature` is Ed25519 over the JCS canonical bytes of the `checkpoint` sub-object alone. The signature MUST be produced by the local log's signing key (the key whose fingerprint defines `log_id`).
+
+### 11.2 Checkpoint IRI and storage
+
+The canonical bytes of the Signed envelope hash to the Checkpoint's content hash. The IRI naming a Checkpoint elsewhere in the system is:
+
+```
+checkpoint:<sha256-of-signed-canonical-bytes>
+```
+
+A Checkpoint is stored as raw evidence under `<root>/raw/origin.checkpoint/<yyyy-mm-dd>/<sha256>.bin`. Checkpoints are NOT predicate-bearing Identities; they are evidence referenced by anchor Identities.
+
+### 11.3 Anchor identity
+
+When the operator obtains a response from a transparency provider (e.g., a Rekor log entry, a git commit SHA, a signed pastebin record) for a previously-produced Checkpoint, the local node MUST record the act as an Identity:
+
+| Field | Value |
+|---|---|
+| `subject` | The Checkpoint IRI: `checkpoint:<sha256>` |
+| `predicate` | `transparency_log_records_checkpoint` |
+| `object` | `{ kind: iri, iri: "<provider-entry-iri>" }` |
+| `evidence_id` | SHA-256 of the provider's response bytes (stored as raw evidence) |
+| `observed_at` | RFC 3339 UTC timestamp of recording |
+| `normalizer` | `transparency-anchor-recorder@v0.1.0` (or implementation-equivalent) |
+| `vocab` | active local vocabulary version |
+
+The predicate is OBSERVATION class. The Occurrence citing this Identity MUST have `attestor_role = observer`. No verification claim is implied by recording an anchor.
+
+The provider-entry IRI is implementation-defined per provider: Sigstore Rekor uses `rekor:<entry-uuid>`; a git anchor uses `git:<commit-sha>`; pastebin/append-only-blob systems use a stable provider-specific prefix. The protocol does not enumerate providers.
+
+### 11.4 What anchors do and do not claim
+
+An anchor's truth content is:
+
+- **Observed:** the operator obtained the recorded bytes from the named provider at `observed_at`.
+- **Verifiable later (check #13):** the Checkpoint's `(log_id, seq, chain_hash)` triple matches the local chain.
+
+An anchor does NOT claim:
+
+- That the provider is honest about its append-only behaviour.
+- That `observed_at` is accurate relative to the provider's record.
+- That the provider's record is real (e.g., that a Rekor entry was actually inserted into the public log).
+- That the underlying log content is true.
+
+Inclusion-proof verification (cryptographically verifying that the provider actually committed to the bytes the operator received) is a separate, verification-class operation; v0 does not specify it. See §17.
+
+### 11.5 Federation of anchors
+
+Anchor Identities are observation class and therefore pass through the federation boundary unchanged via §10.3 step 8 (the observation/structural branch). No `peer_reports_*` rewrite is required at the boundary; the v6 vocabulary reserves `peer_reports_transparency_log_records_checkpoint_of` but implementations typically do NOT mint it — anchor identities are already correctly classified.
+
+---
+
+## 12. Policy execution
+
+### 12.1 Policy structure
 
 A policy lives at `policies/<id>/<version>/policy.rego` with a sibling `manifest.json`:
 
@@ -468,15 +546,15 @@ A policy lives at `policies/<id>/<version>/policy.rego` with a sibling `manifest
 }
 ```
 
-### 11.2 Pure-function execution
+### 12.2 Pure-function execution
 
 Policies are evaluated as pure functions of `(snapshot, query)`. The snapshot is constructed by the evaluator from the projection; it includes only the rows the policy declared interest in via `required_predicates` and `required_raw_sources`. Policies MUST NOT perform I/O, MUST NOT call `http.send` or any equivalent, and MUST NOT consult external data sources at runtime.
 
-### 11.3 The snapshot's identity_ids_consumed
+### 12.3 The snapshot's identity_ids_consumed
 
 The evaluator MUST record, for each Identity row included in the snapshot, the `identity_id` and any cited raw evidence ids. The TrustClaim's `identity_ids_consumed` and `raw_evidence_ids_consumed` arrays are populated from this set.
 
-### 11.4 Projection manifest
+### 12.4 Projection manifest
 
 The MANIFEST.json sidecar to the projection carries:
 
@@ -501,9 +579,9 @@ The implementation MUST recompute these on rebuild and refuse to load a projecti
 
 ---
 
-## 12. Verify procedure
+## 13. Verify procedure
 
-A conforming implementation MUST support a `verify` operation that performs the following twelve checks. Each check is independent; failure of any check is a hard fail with the specific cause surfaced.
+A conforming implementation MUST support a `verify` operation that performs the following thirteen checks. Each check is independent; failure of any check is a hard fail with the specific cause surfaced.
 
 1. **Identity reproducibility.** For every Identity in the local store, recompute the canonical envelope hash and confirm equality with the stored `id`.
 2. **Occurrence signatures.** For every Occurrence in the local log, recompute the canonical envelope hash, confirm equality with the stored `id`, and verify the signature against the attestor's public key.
@@ -517,23 +595,30 @@ A conforming implementation MUST support a `verify` operation that performs the 
 10. **Foreign chain integrity (per peer).** For each registered peer, walk that peer's chain.log under `foreign/<peer-log-id>/` and confirm chain-hash continuity (same as check 3, but per foreign log).
 11. **Foreign occurrence signatures.** For every Occurrence in each foreign log, verify the signature against the peer's public key from the peer-key registry.
 12. **No-laundering.** Walk every Occurrence with `attestor_role = federated_importer`; resolve its `identity_id`; assert the cited Identity's predicate has verification_class ∈ {observation, structural}. Any violation is a hard fail with the offending Occurrence ID surfaced.
+13. **Anchor integrity.** For every Identity with predicate `transparency_log_records_checkpoint`, resolve the Checkpoint cited in its `subject` (a `checkpoint:<sha256>` IRI) to the raw evidence record holding the signed Checkpoint bytes. Parse the Checkpoint. Locate the chain whose `log_id` matches `checkpoint.log_id` (the local chain or a registered foreign chain). Categorise the outcome:
+    - **OK** — a chain entry exists at `seq = checkpoint.seq` and its `chain_hash` equals `checkpoint.chain_hash`.
+    - **TAMPER** — a chain entry exists at that seq but its `chain_hash` differs.
+    - **TRUNCATED** — no chain entry exists at that seq (the chain is shorter than the anchor implies).
+    - **MISSING_LOG** — `checkpoint.log_id` matches no local or registered foreign log.
+
+    Any outcome other than OK is a hard fail with the offending anchor Identity ID and the failure category surfaced.
 
 ---
 
-## 13. Conformance
+## 14. Conformance
 
 An "Origin Protocol v0 conformant" implementation MUST satisfy:
 
 **Mandatory:**
 
-1. Reproduce the byte-equal canonical encodings and IDs for every artefact in `protocol/v0-fixtures/` per §14.
+1. Reproduce the byte-equal canonical encodings and IDs for every artefact in `protocol/v0-fixtures/` per §15.
 2. Produce verify check #1 (identity reproducibility) outputs equivalent to the fixture's `verify-output.txt` for the federation fixture.
 3. Refuse to write or accept any Identity, Occurrence, or TrustClaim that violates the validation rules in §3.4, §4.6, or §5.5.
 4. Implement the rewrite rule in §10.3-§10.5 such that:
    - importing a verification-class foreign Identity does NOT add a row to the local verification-class predicate table;
    - the corresponding `peer_reports_*` observation Identity IS added;
    - the resulting federated_importer-role Occurrence cites the rewritten local Identity.
-5. Implement at least the twelve verify checks in §12. Implementations MAY add further checks; they MUST NOT skip any of these twelve.
+5. Implement the thirteen verify checks in §13. Implementations MAY add further checks; they MUST NOT skip any of these thirteen.
 
 **Optional (an implementation MAY):**
 
@@ -552,13 +637,17 @@ An "Origin Protocol v0 conformant" implementation MUST satisfy:
 
 ---
 
-## 14. Test fixtures
+## 15. Test fixtures
 
 The fixture directory at `protocol/v0-fixtures/` contains the byte-equality reference. Layout:
 
 ```
 v0-fixtures/
 ├── README.md
+├── gen.go                                  regenerates every fixture deterministically
+├── fixtures_test.go                        identity / occurrence / claim / raw-evidence / key fixtures
+├── federation_test.go                      end-to-end no-laundering federation flow (synthetic peers)
+├── anchor_test.go                          checkpoint + anchor identity + vocab-class invariant
 ├── keys/test-signer.pub                    32-byte raw Ed25519 public key
 ├── keys/test-signer.ed25519                64-byte raw Ed25519 private key
 │                                            (TEST-ONLY; MUST NOT sign production data)
@@ -568,13 +657,16 @@ v0-fixtures/
 │   ├── observation.expected-id             SHA-256 of canonical-bytes, hex
 │   ├── verified.json                       sample verification-class Identity
 │   ├── verified.canonical-bytes
-│   └── verified.expected-id
+│   ├── verified.expected-id
+│   ├── peer_reports.json                   sample peer_reports_* identity (object.kind = ref)
+│   ├── peer_reports.canonical-bytes
+│   └── peer_reports.expected-id
 ├── occurrence/
 │   ├── observer.json                       sample observer-role Occurrence
 │   ├── observer.canonical-bytes            JCS bytes of envelope (without `id`, `chain_hash`, `signature`)
 │   ├── observer.expected-id
 │   ├── observer.expected-signature         signed by keys/test-signer
-│   ├── federated_importer.json             sample federated_importer Occurrence
+│   ├── federated_importer.json             sample federated_importer-role Occurrence
 │   ├── federated_importer.canonical-bytes
 │   ├── federated_importer.expected-id
 │   └── federated_importer.expected-signature
@@ -584,75 +676,83 @@ v0-fixtures/
 │   └── sample.expected-id
 ├── raw-evidence/
 │   ├── sample-payload.bin                  arbitrary bytes
-│   ├── sample-payload.expected-hash
-│   ├── sample-metadata.json                signed metadata sidecar
-│   ├── sample-metadata.canonical-bytes
-│   └── sample-metadata.expected-id
-├── federation/
-│   ├── peer-a/data/...                     full minimal peer-A archive
-│   ├── peer-b/data/...                     full minimal peer-B archive
-│   ├── import-args.txt                     exact import command
-│   ├── post-import/identities_hash         expected hash after A imports B
-│   ├── post-import/claim-id                expected claim ID for the chosen subject
-│   └── post-import/verify-output.txt       expected `origin verify` output (12 checks)
-└── fixtures_test.go                        runs on every `go test ./...`
+│   └── sample-payload.expected-hash        SHA-256 of the payload, hex
+└── anchor/
+    ├── checkpoint.json                     sample Signed Checkpoint envelope
+    ├── checkpoint.canonical-bytes          JCS bytes of the Signed envelope
+    ├── checkpoint.expected-iri             checkpoint:<sha256>
+    ├── provider-response.json              sample transparency-provider response bytes
+    ├── provider-response.expected-hash     SHA-256 of provider response, hex
+    ├── anchor-identity.json                sample transparency_log_records_checkpoint Identity
+    ├── anchor-identity.canonical-bytes
+    └── anchor-identity.expected-id
 ```
 
 A conforming implementation MUST be able to:
 
-- read `observation.json`, JCS-canonicalise it, and produce bytes equal to `observation.canonical-bytes`;
-- hash those bytes and produce `observation.expected-id`;
-- accept the federation archive, run the import procedure, and produce the documented post-import state.
+- read `identity/observation.json`, JCS-canonicalise it, and produce bytes equal to `identity/observation.canonical-bytes`;
+- hash those bytes and produce `identity/observation.expected-id`;
+- read `anchor/checkpoint.json`, JCS-canonicalise the Signed envelope, hash the result, and produce `anchor/checkpoint.expected-iri`;
+- read `anchor/anchor-identity.json` and produce `anchor/anchor-identity.expected-id` via the §3 identity canonicalisation rules;
+- run the federation flow (`federation_test.go`) and produce the post-import state described in §10.3–§10.5 (no on-disk peer archives; the test constructs deterministic peer-a and peer-b states in a temporary directory and exercises the importer).
 
 The test signing key is checked into the repository explicitly for fixture reproducibility. The key fingerprint is documented in the fixture's README. Implementations MAY (and SHOULD) refuse to sign production data with this fingerprint at runtime.
 
 ---
 
-## 15. Security considerations
+## 16. Security considerations
 
-### 15.1 Trust roots
+### 16.1 Trust roots
 
 Cryptographic verification (§7.2 verification class) anchors to a root of trust that MUST be pinned in the implementation's source code, not fetched at runtime. Live-fetched roots cede the local-computation property (invariant 16) and are forbidden by this protocol.
 
 For Sigstore-based verifiers, the public-good trusted-root JSON is the v0 reference root; implementations MAY use alternative private-instance roots PROVIDED the substitution is a source-tree change, visible in git history.
 
-### 15.2 Peer compromise
+### 16.2 Peer compromise
 
 A compromised peer can produce signed but malicious foreign Occurrences. The rewrite rule (§10.5) prevents this from reaching the local verified-form table. The peer's claims become local observations of what the peer claims — never local verifications.
 
 A compromised peer's signing key, once detected, MAY be revoked via a per-peer revocation record at `<root>/peers/<peer-log-id>.revoked`. Occurrences whose foreign `ingested_at` is after the revocation time MUST be flagged distinctly in verify output (this provision is normative for v1; v0 implementations SHOULD support it but MAY not).
 
-### 15.3 Registry compromise
+### 16.3 Registry compromise
 
 If an external observation source (npm registry, OSV, etc.) is compromised, observation-class Identities derived from that source carry the compromise. The protocol does not detect this directly; corroboration across independent sources is the policy author's tool, not the protocol's. Independence semantics are an open question (`epistemic-model.v1.md` §11) and will be addressed in v1.
 
-### 15.4 Verifier code trust
+### 16.4 Verifier code trust
 
 Verification-class predicates rely on the correctness of the implementation's verifier code (e.g., Sigstore signature checking). This is code trust, distinct from data trust. Auditing verifier correctness is a source-code review concern, not addressed by this protocol.
 
-### 15.5 Replay vs drift
+### 16.5 Replay vs drift
 
 A successful verify in the past does not guarantee a successful verify now: cryptographic validity is time-dependent (cert expiry, root rotation). Check #8 (cryptographic re-verification) re-executes the verifier; a previously valid signature that no longer verifies is "drift" rather than "tamper". Implementations SHOULD distinguish these in error reporting; v0 does not mandate a particular schema for the distinction.
 
+### 16.6 Anchor evidence epistemics
+
+The `transparency_log_records_checkpoint` predicate is OBSERVATION class by construction (§11.4). Recording an anchor MUST NOT be treated as a verification of the underlying log content, of provider honesty, or of provider append-only behaviour. An anchor binds local-chain state to externally-visible bytes; its value is that *tampering with local history after submission becomes externally detectable* by anyone who can observe both the provider and the local chain.
+
+Verify check #13 catches local-side tamper / truncation: if a previously-anchored seq is rewritten or removed, the (log_id, seq, chain_hash) triple recorded in the Checkpoint no longer matches the local chain, and check #13 fails. The provider's own honesty is NOT verified by the protocol; it is observable out-of-band by anyone who can read the provider's record.
+
+Inclusion-proof verification — cryptographically confirming the provider actually committed to the bytes returned to the operator — is a separate, verification-class operation. v0 does not define an inclusion-proof predicate or procedure; this is reserved for a later revision.
+
 ---
 
-## 16. Acknowledged limitations
+## 17. Acknowledged limitations
 
 The following are explicitly NOT specified by v0 and remain open:
 
 - **Independence semantics.** Multiple observation predicates from different sources can corroborate a fact, but v0 does not define "independent". Multiple peers reporting the same observation from the same ultimate source are not independent in any deep sense.
 - **Identity entity layer.** Identities (in the keyed-principal sense) appear as string columns. A v1+ revision will likely promote Identity to a typed entity table; the predicate-level shape does not yet require this.
-- **Transparency-log anchoring of the local chain.** The local chain is internally verifiable but lacks external anchoring. v1 may incorporate Rekor anchoring or an equivalent.
-- **Policy authoring against `peer_reports_*`.** v0 declares the predicates but does not ship a reference policy that consumes them.
+- **Inclusion-proof verification of anchors.** v0 records anchors as observation-class evidence and binds the cited Checkpoint back to the local chain (check #13). It does NOT specify a verification-class predicate or procedure for cryptographically verifying inclusion proofs returned by a transparency provider. Such verification (e.g., Rekor inclusion proofs, signed-tree-head consistency proofs) is reserved for a future revision; it would mint a verification-class predicate paired with a `peer_reports_*` rewrite for the federation boundary.
+- **Policy authoring against `peer_reports_*` and anchor predicates.** v0 declares these predicates but does not ship a reference policy that consumes them.
 - **Conflict resolution.** Two peers reporting incompatible observations of the same fact (e.g., different `published_by` for the same `subject`) are recorded as distinct observations; the protocol does not adjudicate.
 
 These items will be addressed in future protocol versions; their absence here is intentional.
 
 ---
 
-## Appendix A: Vocabulary, v5
+## Appendix A: Vocabulary, v6
 
-The reference vocabulary for v0 is `vocab/v5.json`. It declares the following predicates:
+The reference vocabulary for v0 is `vocab/v6.json`. It declares the following predicates:
 
 | Predicate | Verification class | Object kind |
 |---|---|---|
@@ -668,6 +768,10 @@ The reference vocabulary for v0 is `vocab/v5.json`. It declares the following pr
 | `derived_from` | structural | assertion_or_claim |
 | `peer_reports_cryptographic_verification_of` | observation | ref |
 | `peer_reports_cryptographic_verification_failed_of` | observation | ref |
+| `transparency_log_records_checkpoint` | observation | iri |
+| `peer_reports_transparency_log_records_checkpoint_of` | observation | ref |
+
+Versions v1 through v5 are retained in `vocab/` for reproducibility of identities recorded against earlier vocabularies. Vocabulary revision is additive (§7.1); an implementation MAY ship later supersets without losing v0 conformance.
 
 ---
 
@@ -678,7 +782,7 @@ An external party with access to this document, the fixture directory, and a wor
 1. Implement JCS, SHA-256, and Ed25519 (using any conforming library) and confirm fixture byte-equality.
 2. Run the federation fixture's import scenario and produce the documented post-import state.
 3. Generate their own Identity and Occurrence envelopes signed by their own keys, share them with another node running the same protocol, and federate without trust laundering.
-4. Read §3-§12 and answer, for any observable behaviour in either implementation, which protocol rule governs that behaviour.
+4. Read §3-§13 and answer, for any observable behaviour in either implementation, which protocol rule governs that behaviour.
 
 If any of these is not achievable from this document + fixture, the document has drifted from the implementation and an erratum revision is required.
 
@@ -688,4 +792,4 @@ If any of these is not achievable from this document + fixture, the document has
 
 | Version | Date | Notes |
 |---|---|---|
-| v0 | 2026-05-15 | Initial release. Covers project phases 1-3.5. |
+| v0 | 2026-05-15 | Initial release. Covers project phases 1-5: identity / occurrence / claim envelopes (§3-§5), raw evidence (§6), vocabulary v6 (§7, Appendix A), identity store + occurrence log (§8-§9), filesystem federation with the no-laundering rule (§10), transparency anchoring (§11), policy execution (§12), and the thirteen verify checks (§13). |

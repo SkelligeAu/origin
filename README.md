@@ -77,7 +77,7 @@ origin/
 
 ## Quickstart
 
-Requires Go 1.21 or later.
+Requires Go 1.26 or later (matches `go.mod`).
 
 ```sh
 # Build

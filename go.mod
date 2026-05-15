@@ -4,6 +4,7 @@ go 1.26.2
 
 require (
 	github.com/open-policy-agent/opa v1.16.2
+	github.com/sigstore/sigstore-go v1.1.4
 	modernc.org/sqlite v1.50.1
 )
 
@@ -71,7 +72,6 @@ require (
 	github.com/sigstore/rekor v1.4.3 // indirect
 	github.com/sigstore/rekor-tiles/v2 v2.0.1 // indirect
 	github.com/sigstore/sigstore v1.10.0 // indirect
-	github.com/sigstore/sigstore-go v1.1.4 // indirect
 	github.com/sigstore/timestamp-authority/v2 v2.0.3 // indirect
 	github.com/sirupsen/logrus v1.9.4 // indirect
 	github.com/tchap/go-patricia/v2 v2.3.3 // indirect
